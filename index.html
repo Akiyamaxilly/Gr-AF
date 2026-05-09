@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>大斌 · GR战队 · 第五人格职业选手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@300;400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --gold:#c9a84c;--gold2:#f0cc6d;--gold-dim:#7a5e25;
+  --dark:#060606;--dark2:#0d0d0d;--panel:#101010;
+  --text:#e8e0d0;--muted:#5a5248;
+  --line:rgba(201,168,76,.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--text);font-family:'Noto Sans SC',sans-serif;font-weight:300;overflow-x:hidden;cursor:crosshair}
+
+/* 扫描线纹理 */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.2) 3px,rgba(0,0,0,.2) 4px);
+  opacity:.4;
+}
+/* 背景光晕 */
+.bg-glow{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -5%,rgba(201,168,76,.1) 0%,transparent 60%),
+    radial-gradient(ellipse 35% 35% at 88% 88%,rgba(180,48,48,.07) 0%,transparent 55%);
+}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 5vw;
+  background:rgba(6,6,6,.92);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.25em;color:var(--gold);text-decoration:none}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.15em;text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:var(--gold)}
+
+/* ─── HERO ─── */
+#hero{
+  position:relative;z-index:1;min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;padding:0 8vw;gap:4rem;overflow:hidden;
+}
+.hero-bg-text{
+  position:absolute;right:-2rem;top:50%;transform:translateY(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(16vw,22vw,28rem);
+  line-height:1;color:transparent;-webkit-text-stroke:1px rgba(201,168,76,.05);
+  user-select:none;pointer-events:none;letter-spacing:-.02em;
+}
+.hero-left{position:relative;z-index:2}
+.eyebrow{display:flex;align-items:center;gap:.8rem;margin-bottom:1.6rem;animation:fadeLeft .8s ease both}
+.eyebrow-line{width:36px;height:1px;background:var(--gold)}
+.eyebrow-text{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.hero-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5.5rem,12vw,10.5rem);
+  line-height:.88;letter-spacing:.06em;
+  animation:fadeLeft .9s .1s ease both;
+}
+.hero-name .stroke{-webkit-text-stroke:2px var(--gold);color:transparent}
+.hero-tagline{margin-top:1.4rem;font-size:.88rem;letter-spacing:.18em;color:var(--muted);animation:fadeLeft .9s .2s ease both}
+.hero-badges{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.8rem;animation:fadeLeft .9s .3s ease both}
+.badge{
+  display:inline-flex;align-items:center;gap:.5rem;padding:.32rem 1rem;
+  border:1px solid var(--gold-dim);
+  font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--gold);letter-spacing:.1em;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+.hero-desc{
+  max-width:420px;margin-top:2rem;font-size:.86rem;line-height:1.9;
+  color:var(--muted);border-left:2px solid var(--gold-dim);padding-left:1rem;
+  animation:fadeLeft .9s .4s ease both;
+}
+
+/* 右侧头像框 */
+.hero-right{position:relative;z-index:2;display:flex;justify-content:center;animation:fadeRight 1s .2s ease both}
+.avatar-frame{position:relative;width:clamp(240px,28vw,380px);aspect-ratio:3/4}
+.avatar-inner{position:absolute;inset:0;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+/*
+  ─── 头像图片设置 ───
+  将 .avatar-placeholder 整块替换为：
+  <img src="dabin.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top" alt="大斌"/>
+*/
+.avatar-scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:scan 3.5s ease-in-out infinite;opacity:.55}
+.avatar-placeholder{
+  width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
+  background:linear-gradient(180deg,rgba(201,168,76,.06) 0%,transparent 70%);
+}
+.av-icon{font-size:4.5rem;opacity:.12}
+.av-hint{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--gold-dim);letter-spacing:.1em;text-align:center;padding:0 1.4rem;line-height:1.9}
+.corner{position:absolute;width:18px;height:18px;border-color:var(--gold);border-style:solid}
+.corner.tl{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.corner.tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.corner.bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+.corner.br{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.avatar-tag{
+  position:absolute;bottom:1.4rem;left:-1px;
+  background:var(--gold);padding:.28rem .8rem;
+  font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:.18em;color:var(--dark);
+}
+
+/* ─── STATS BAR ─── */
+#stats{
+  position:relative;z-index:1;background:var(--panel);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:2.5rem 8vw;
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.stat-wrap{padding:1.4rem 1rem;text-align:center;border-right:1px solid var(--line);position:relative}
+.stat-wrap:last-child{border-right:none}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,4.5rem);line-height:1;color:var(--gold);letter-spacing:.05em}
+.stat-num sup{font-size:1.3rem;vertical-align:super}
+.stat-label{margin-top:.4rem;font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:.15em}
+.stat-wrap::after{content:'';position:absolute;bottom:0;left:25%;right:25%;height:1px;background:var(--gold);opacity:0;transition:opacity .3s}
+.stat-wrap:hover::after{opacity:.7}
+
+/* ─── SECTION 通用头 ─── */
+.section-head{display:flex;align-items:center;gap:1rem;margin-bottom:3rem}
+.s-num{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--gold-dim);letter-spacing:.1em}
+.s-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,3.5vw,2.8rem);letter-spacing:.18em;color:var(--text)}
+.s-line{flex:1;height:1px;background:var(--line)}
+
+/* ─── 招牌角色 ─── */
+#signature{position:relative;z-index:1;padding:6rem 8vw}
+.chars-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.char-card{
+  background:var(--panel);border:1px solid var(--line);
+  padding:2.2rem 2rem;position:relative;overflow:hidden;
+  transition:border-color .3s,transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.char-card:hover{border-color:var(--gold-dim);transform:translateY(-6px)}
+.char-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .3s}
+.char-card:hover::before{opacity:1}
+.char-bg-word{
+  position:absolute;right:-1rem;top:50%;transform:translateY(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:7rem;
+  color:transparent;-webkit-text-stroke:1px rgba(201,168,76,.05);pointer-events:none;
+}
+.sig-label{position:absolute;top:1rem;right:1rem;border:1px solid var(--gold-dim);padding:.18rem .55rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--gold-dim);letter-spacing:.12em}
+.char-icon{font-size:2.8rem;margin-bottom:1rem;line-height:1}
+.char-name{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.15em;color:var(--text);margin-bottom:.4rem}
+.char-en{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.22em;margin-bottom:1rem}
+.char-tag{display:inline-block;padding:.18rem .7rem;background:rgba(201,168,76,.08);border:1px solid var(--gold-dim);font-size:.65rem;color:var(--gold);letter-spacing:.1em;margin-bottom:1.2rem}
+.char-desc{font-size:.82rem;line-height:1.95;color:var(--muted)}
+
+/* ─── 荣誉时间轴 ─── */
+#honors{position:relative;z-index:1;padding:6rem 8vw;background:var(--dark2)}
+.timeline{position:relative;margin-top:.5rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--gold-dim) 20%,var(--gold-dim) 80%,transparent)}
+.tl-item{position:relative;padding:.8rem 0 2.5rem 2.8rem}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-5px;top:.9rem;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px rgba(201,168,76,.7)}
+.tl-year{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;line-height:1;color:var(--gold);letter-spacing:.08em}
+.tl-event{font-size:1.05rem;font-weight:700;color:var(--text);margin:.35rem 0 .45rem;letter-spacing:.06em}
+.tl-detail{font-size:.82rem;color:var(--muted);line-height:1.85;max-width:640px}
+.tl-mvp{
+  display:inline-block;margin-top:.7rem;padding:.22rem .8rem;
+  background:rgba(201,168,76,.1);border:1px solid var(--gold-dim);
+  font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--gold);letter-spacing:.12em;
+}
+
+/* ─── 大引言 ─── */
+#quote{position:relative;z-index:1;padding:8rem 8vw;text-align:center;overflow:hidden}
+.quote-deco{font-family:'Bebas Neue',sans-serif;font-size:9rem;line-height:.8;color:rgba(201,168,76,.07);user-select:none}
+.quote-text{
+  font-family:'Noto Sans SC',sans-serif;font-weight:900;
+  font-size:clamp(1.5rem,3.5vw,2.4rem);line-height:1.4;
+  color:var(--text);letter-spacing:.1em;max-width:720px;margin:0 auto;
+}
+.quote-text em{color:var(--gold);font-style:normal}
+.quote-src{margin-top:1.6rem;font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:.2em}
+
+/* ─── FOOTER ─── */
+footer{
+  position:relative;z-index:1;border-top:1px solid var(--line);
+  padding:1.8rem 8vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.25em;color:var(--gold-dim)}
+.footer-note{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.1em}
+
+/* ─── 动画 ─── */
+@keyframes fadeLeft{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeRight{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.5)}50%{box-shadow:0 0 0 5px rgba(201,168,76,0)}}
+@keyframes scan{0%{top:0;opacity:.55}100%{top:100%;opacity:0}}
+
+/* ─── 响应式 ─── */
+@media(max-width:768px){
+  #hero{grid-template-columns:1fr;padding-top:5.5rem}
+  .hero-right{display:none}
+  #stats{grid-template-columns:repeat(2,1fr)}
+  .stat-wrap:nth-child(2){border-right:none}
+  .chars-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-brand" href="#hero">GR · 大斌</a>
+  <ul class="nav-links">
+    <li><a href="#stats">数据</a></li>
+    <li><a href="#signature">招牌角色</a></li>
+    <li><a href="#honors">荣誉</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-bg-text">DB</div>
+
+  <div class="hero-left">
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Identity V · Professional Survivor</span>
+    </div>
+
+    <h1 class="hero-name">
+      大<span class="stroke">斌</span>
+    </h1>
+
+    <p class="hero-tagline">GR ESPORTS &nbsp;·&nbsp; SURVIVOR &nbsp;·&nbsp; LEGEND</p>
+
+    <div class="hero-badges">
+      <span class="badge"><span class="badge-dot"></span>GR战队在籍</span>
+      <span class="badge">🏆 三届世锦赛冠军</span>
+      <span class="badge">⭐ MVP × 3</span>
+    </div>
+
+    <p class="hero-desc">
+      第五人格职业赛场上最耀眼的求生者核心。<br>
+      以咒术师与舞女为双核绝活，<br>
+      三度站上世锦赛最高领奖台，蝉联 MVP 荣耀，<br>
+      GR战队无可争议的绝对主力。
+    </p>
+  </div>
+
+  <div class="hero-right">
+    <div class="avatar-frame">
+      <!--
+        【头像图片替换】
+        删除 .avatar-placeholder 整块，替换为：
+        <img src="dabin.jpg" style="width:100%;height:100%;object-fit:cover;object-position:top center" alt="大斌"/>
+      -->
+      <div class="avatar-inner">
+        <div class="avatar-scan"></div>
+        <div class="avatar-placeholder">
+          <div class="av-icon">🎮</div>
+          <div class="av-hint">[ 在此放置选手照片 ]<br>将 avatar-placeholder<br>替换为 &lt;img src="dabin.jpg"&gt;</div>
+        </div>
+      </div>
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+      <div class="avatar-tag">GR · SURVIVOR</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<section id="stats">
+  <div class="stat-wrap">
+    <div class="stat-num">3<sup>届</sup></div>
+    <div class="stat-label">世锦赛冠军</div>
+  </div>
+  <div class="stat-wrap">
+    <div class="stat-num">3<sup>×</sup></div>
+    <div class="stat-label">MVP 蝉联</div>
+  </div>
+  <div class="stat-wrap">
+    <div class="stat-num">2</div>
+    <div class="stat-label">招牌绝活角色</div>
+  </div>
+  <div class="stat-wrap">
+    <div class="stat-num">GR</div>
+    <div class="stat-label">所属战队</div>
+  </div>
+</section>
+
+<!-- ══ 招牌角色 ══ -->
+<section id="signature">
+  <div class="section-head">
+    <span class="s-num">// 01</span>
+    <h2 class="s-title">招牌绝活</h2>
+    <div class="s-line"></div>
+  </div>
+
+  <div class="chars-grid">
+    <div class="char-card">
+      <div class="char-bg-word">咒</div>
+      <div class="sig-label">SIGNATURE</div>
+      <div class="char-icon">🔮</div>
+      <div class="char-name">咒术师</div>
+      <div class="char-en">SORCERER</div>
+      <div class="char-tag">求生者 · 控场型</div>
+      <p class="char-desc">
+        大斌操控咒术师的风格极具侵略性，凭借对技能节奏的精准把握，
+        在对抗监管者时屡次创造以少胜多的奇迹。
+        其职业赛中咒术师使用率与胜率均居顶尖水准，
+        被业内公认为赛场上的「咒术师第一人」。
+      </p>
+    </div>
+
+    <div class="char-card">
+      <div class="char-bg-word">舞</div>
+      <div class="sig-label">SIGNATURE</div>
+      <div class="char-icon">💃</div>
+      <div class="char-name">舞女</div>
+      <div class="char-en">DANCER</div>
+      <div class="char-tag">求生者 · 机动型</div>
+      <p class="char-desc">
+        舞女的极高机动性在大斌手中发挥得淋漓尽致。
+        刁钻走位与对地图空间的深度理解，让他在关键局面总能找到生机。
+        世锦赛决赛中多次舞女极限操作已成为赛事历史上的经典片段。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 荣誉时间轴 ══ -->
+<section id="honors">
+  <div class="section-head">
+    <span class="s-num">// 02</span>
+    <h2 class="s-title">荣耀战绩</h2>
+    <div class="s-line"></div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">第一届</div>
+      <div class="tl-event">第五人格世界锦标赛 · 冠军</div>
+      <div class="tl-detail">
+        代表 GR 战队出征，以求生端核心身份全程无败绩，
+        率队斩获世锦赛首冠。咒术师与舞女的双线统治令对手无从应对。
+      </div>
+      <span class="tl-mvp">🏅 MVP · 大斌</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">第二届</div>
+      <div class="tl-event">第五人格世界锦标赛 · 卫冕冠军</div>
+      <div class="tl-detail">
+        面对全联盟的重点针对与专项克制阵容，大斌依然保持统治级发挥。
+        舞女决赛极限逆转操作成为扭转战局的关键，成功卫冕世界冠军。
+      </div>
+      <span class="tl-mvp">🏅 MVP · 大斌（蝉联）</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">第三届</div>
+      <div class="tl-event">第五人格世界锦标赛 · 三连冠封神之战</div>
+      <div class="tl-detail">
+        史诗级三连冠征程。决赛五局三胜的生死对决中，
+        大斌连续使用咒术师完成不可思议的逆转收割，
+        封神之战永远写入第五人格电竞历史。
+      </div>
+      <span class="tl-mvp">🏅 MVP · 大斌（三连 MVP · 封神）</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 引言 ══ -->
+<section id="quote">
+  <div class="quote-deco">"</div>
+  <p class="quote-text">
+    GR最<em>屌</em>的求生，<br>不是之一。
+  </p>
+  <div class="quote-src">— GR ESPORTS · 大斌</div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-logo">GR · 大斌 · 第五人格</div>
+  <div class="footer-note">粉丝制作 · 非官方站点 · IDENTITY V FAN SITE</div>
+</footer>
+
+<script>
+// 时间轴滚动入场
+const tlItems = document.querySelectorAll('.tl-item');
+const obs1 = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateX(0)';
+      }, i * 150);
+    }
+  });
+}, { threshold: 0.15 });
+tlItems.forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateX(-22px)';
+  el.style.transition = 'opacity .6s ease, transform .6s ease';
+  obs1.observe(el);
+});
+
+// 卡片 & stat 入场
+const cards = document.querySelectorAll('.char-card, .stat-wrap');
+const obs2 = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }, i * 110);
+    }
+  });
+}, { threshold: 0.1 });
+cards.forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(18px)';
+  el.style.transition = 'opacity .55s ease, transform .55s ease, border-color .3s';
+  obs2.observe(el);
+});
+
+// 引言入场
+const quote = document.querySelector('.quote-text');
+const obs3 = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.3 });
+if (quote) {
+  quote.style.opacity = '0';
+  quote.style.transform = 'translateY(24px)';
+  quote.style.transition = 'opacity .8s ease, transform .8s ease';
+  obs3.observe(quote);
+}
+</script>
+</body>
+</html>
